@@ -5,8 +5,7 @@ from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 
 
-def safer(text: str) -> str:
-    return text.replace('.', '\\.')
+QUIT_PHRASE = "I don't love you anymore, bot..."
 
 
 class YouChatInterface:
@@ -55,7 +54,11 @@ class YouChatInterface:
 
 
     async def telegram_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        query_text = update.message.text[len(self.cmd_prefix):].strip()
+        query_text = update.message.text[len(self.cmd_prefix) + 1:].strip()
+        if QUIT_PHRASE in query_text:
+            await update.message.reply_text('My heart is broken...')
+            await update.message.chat.leave()
+            return
         await self.process_request(query_text, update, context)
 
     async def process_noncmd_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
