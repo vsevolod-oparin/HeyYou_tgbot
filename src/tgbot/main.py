@@ -54,22 +54,6 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     await update.message.reply_html(HELP_MESSAGE)
 
 
-async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Echo the user message."""
-    await update.message.reply_text(update.message.text)
-
-
-async def you_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Echo the user message."""
-    await update.message.reply_text(
-        update.message.text,
-        reply_to_message_id=update.message.id,
-        parse_mode="MarkdownV2",
-    )
-
-
-
-
 def get_token(token_path: Path) -> str:
     with open(token_path) as f:
         return f.read()
@@ -88,7 +72,6 @@ def main() -> None:
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler(youchat_interface.cmd_prefix, youchat_interface.telegram_command))
-    application.add_handler(CommandHandler("echo", you_command))
 
     # on non command i.e message - echo the message on Telegram
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, youchat_interface.process_noncmd_message))

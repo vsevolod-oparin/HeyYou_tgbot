@@ -46,6 +46,7 @@ class YouChatInterface:
         you_chat_response = self.get_response(query_text)
         await update.message.reply_text(
             f'YouChat says:\n\n{you_chat_response[:self.max_output_length]}',
+            reply_to_message_id=update.message.id,
         )
         for i in range(self.max_output_length, len(you_chat_response), self.max_output_length):
             await update.message.reply_text(
