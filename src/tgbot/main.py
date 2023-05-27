@@ -62,8 +62,8 @@ def get_token(token_path: Path) -> str:
 def main() -> None:
     """Start the bot."""
     # Create the Application and pass it your bot's token.
-    path_to_tg_token = Path("/home/smileijp/projects/tgbots/HeyYou/src/tokens/telegram")
-    path_to_api_token = Path("/home/smileijp/projects/tgbots/HeyYou/src/tokens/betterapi")
+    path_to_tg_token = Path("src/tokens/telegram")
+    path_to_api_token = Path("src/tokens/betterapi")
 
     application = Application.builder().token(get_token(path_to_tg_token)).build()
     youchat_interface = YouChatInterface(get_token(path_to_api_token))
