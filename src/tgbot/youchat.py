@@ -1,17 +1,21 @@
+from logging import Logger
+
 import requests
 import urllib.parse
 
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 
+from src.tgbot.utils import htmlify
 
-QUIT_PHRASE = "I don't love you anymore, bot..."
+QUIT_PHRASE = "I don't love you anymore, bot"
 
 
 class YouChatInterface:
 
-    def __init__(self, api_key: str, max_input_length: int = 1024, max_output_length: int = 3500):
+    def __init__(self, api_key: str, logger: Logger, max_input_length: int = 1024, max_output_length: int = 3500):
         self.api_key = api_key
+        self.logger = logger
         self.cmd_prefix = 'heyyou'
         self.max_input_length = max_input_length
         self.max_output_length = max_output_length
@@ -24,7 +28,7 @@ class YouChatInterface:
         except:
             return "Something went wrong with API. Try another time."
 
-        print(json)
+        self.logger.info(json)
         if json is not None and 'status_code' in json and json['status_code'] == 200:
             return json["generated_text"]
         else:
@@ -43,15 +47,14 @@ class YouChatInterface:
             )
             return
         you_chat_response = self.get_response(query_text)
-        await update.message.reply_text(
-            f'YouChat says:\n\n{you_chat_response[:self.max_output_length]}',
+        await update.message.reply_html(
+            f'<i>YouChat says:</i>\n\n{htmlify(you_chat_response[:self.max_output_length])}',
             reply_to_message_id=update.message.id,
         )
         for i in range(self.max_output_length, len(you_chat_response), self.max_output_length):
-            await update.message.reply_text(
-                you_chat_response[i:i + self.max_output_length],
+            await update.message.reply_html(
+                htmlify(you_chat_response[i:i + self.max_output_length]),
             )
-
 
     async def telegram_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         query_text = update.message.text[len(self.cmd_prefix) + 1:].strip()

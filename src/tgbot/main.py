@@ -11,7 +11,8 @@ from pathlib import Path
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes, MessageHandler, filters
 
-from src.tgbot.utils import get_joined_lines, get_file_content
+from src.tgbot.utils import get_joined_lines, get_file_content, htmlify
+
 from src.tgbot.youchat import YouChatInterface
 
 # Enable logging
@@ -22,14 +23,12 @@ logger = logging.getLogger(__name__)
 
 HELP_MESSAGE = get_joined_lines(get_file_content(Path('src/messages/en/help.txt')))
 
+
 # Define a few command handlers. These usually take the two arguments update and
 # context.
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message when the command /start is issued."""
-    await update.message.reply_text(
-        HELP_MESSAGE,
-        parse_mode='HTML',
-    )
+    await update.message.reply_html(HELP_MESSAGE)
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -53,7 +52,7 @@ def main() -> None:
     betterapi_key = get_file_content(Path(args.betterapi_key_path))
 
     application = Application.builder().token(telegram_token).build()
-    youchat_interface = YouChatInterface(betterapi_key)
+    youchat_interface = YouChatInterface(betterapi_key, logger)
 
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
