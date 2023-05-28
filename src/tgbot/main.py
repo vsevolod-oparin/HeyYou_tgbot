@@ -40,6 +40,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Sample training script")
     parser.add_argument("--telegram_token_path", default='src/tokens/telegram', help="Path to telegram token")
     parser.add_argument("--betterapi_key_path", default='src/tokens/betterapi', help="Path to betterapi API key")
+    parser.add_argument("--query_queue_threshold", default=10, type=int, help="Query line threshold to give a warning message")
     return parser
 
 
@@ -51,8 +52,12 @@ def main() -> None:
     telegram_token = get_file_content(Path(args.telegram_token_path))
     betterapi_key = get_file_content(Path(args.betterapi_key_path))
 
-    application = Application.builder().token(telegram_token).build()
-    youchat_interface = YouChatInterface(betterapi_key, logger)
+    application = Application.builder().token(telegram_token).concurrent_updates(True).build()
+    youchat_interface = YouChatInterface(
+        api_key=betterapi_key,
+        logger=logger,
+        query_queue_threshold=args.query_queue_threshold,
+    )
 
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))

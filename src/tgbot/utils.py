@@ -61,7 +61,7 @@ def fixed_width(content: str):
     )
 
 
-def htmlify(content: str) -> str:
+def htmlify(content):
     return decorate_with_alternating_tag(
         content,
         "```",
@@ -70,3 +70,19 @@ def htmlify(content: str) -> str:
         out_tag_func=fixed_width,
         tag_mod=code_langauge,
     )
+
+
+class CounterVar:
+    def __init__(self):
+        self.val = 0
+
+class Counter:
+
+    def __init__(self, variable):
+        self.variable = variable
+
+    def __enter__(self):
+        self.variable.val += 1
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.variable.val -= 1
