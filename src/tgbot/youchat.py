@@ -84,7 +84,7 @@ class YouChatInterface:
                 )
 
     async def telegram_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
-        query_text = update.message.text[len(self.cmd_prefix) + 1:].strip()
+        query_text = ' '.join(update.message.text.split(' ')[1:]).strip()
         if QUIT_PHRASE in query_text:
             await update.message.reply_text('My heart is broken...')
             await update.message.chat.leave()
