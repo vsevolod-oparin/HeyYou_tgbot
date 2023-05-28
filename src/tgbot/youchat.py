@@ -3,7 +3,6 @@ import random
 from logging import Logger
 
 import aiohttp as aiohttp
-import requests
 import urllib.parse
 
 from telegram import Update
