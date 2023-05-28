@@ -31,4 +31,4 @@ checking the factual truthfulness of the response is still subject of user respo
 
 ## License
 
-Regular MIT License.
+Common MIT License.
