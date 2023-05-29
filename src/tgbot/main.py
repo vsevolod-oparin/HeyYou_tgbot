@@ -22,6 +22,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 HELP_MESSAGE = get_joined_lines(get_file_content(Path('src/messages/en/help.txt')))
+INTRO_MESSAGE = get_joined_lines(get_file_content(Path('src/messages/en/intro.txt')))
 
 
 # Define a few command handlers. These usually take the two arguments update and
@@ -34,6 +35,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message when the command /help is issued."""
     await update.message.reply_html(HELP_MESSAGE)
+
+
+async def intro_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Send a message when the command /start is issued."""
+    await update.message.reply_html(INTRO_MESSAGE)
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -62,6 +68,7 @@ def main() -> None:
     # on different commands - answer in Telegram
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("intro", intro_command))
     application.add_handler(CommandHandler(youchat_interface.cmd_prefix, youchat_interface.telegram_command))
 
     # on non command i.e message - echo the message on Telegram

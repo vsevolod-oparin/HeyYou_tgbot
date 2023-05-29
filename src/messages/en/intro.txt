@@ -1,0 +1,3 @@
+Hi, my name is HeyYou bot. I provide an access to YouChat from you.com. I speak in English. If you want to call me, just type
+
+<code>/heyyou &lt;your query&gt;</code>
